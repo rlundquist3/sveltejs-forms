@@ -8,7 +8,7 @@ import {
   map,
   omitBy,
   reject,
-} from 'lodash-es';
+} from 'lodash';
 
 export function createObjectWithDefaultValue(defaultValue = '') {
   return new Proxy(
