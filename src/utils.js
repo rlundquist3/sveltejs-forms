@@ -28,6 +28,7 @@ export function deepCopy(src) {
 }
 
 function recursiveClean(src) {
+  console.log('to clean', src);
   if (isArray(src)) {
     return map(reject(src, isBlank), v => recursiveClean(v));
   }
@@ -41,5 +42,6 @@ function recursiveClean(src) {
 }
 
 export function cleanedDeepCopy(src) {
-  return recursiveClean(cloneDeep(src));
+  console.log(cloneDeep(src), deepCopy(src));
+  return recursiveClean(deepCopy(src));
 }

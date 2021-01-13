@@ -76,7 +76,6 @@
   async function validate() {
     console.log(
       'validating',
-      schema,
       $values,
       cleanedDeepCopy($values),
       deepCopy($values)
