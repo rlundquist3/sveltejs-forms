@@ -7,12 +7,17 @@
   import { writable } from 'svelte/store';
   import set from 'lodash-es/set';
   import get from 'lodash-es/get';
-  import { createObjectWithDefaultValue, deepCopy } from '../utils';
+  import {
+    cleanedDeepCopy,
+    createObjectWithDefaultValue,
+    deepCopy,
+  } from '../utils';
 
   export let initialValues = {};
   export let schema = null;
   export let validateOnChange = true;
   export let validateOnBlur = true;
+  export let stripBeforeValidation = false;
 
   const dispatch = createEventDispatcher();
   const values = writable(createObjectWithDefaultValue());
@@ -74,10 +79,13 @@
       return;
     }
     try {
-      $validatedValues = await schema.validate(deepCopy($values), {
-        abortEarly: false,
-        stripUnknown: true,
-      });
+      $validatedValues = await schema.validate(
+        stripBeforeValidation ? cleanedDeepCopy($values) : deepCopy($values),
+        {
+          abortEarly: false,
+          stripUnknown: true,
+        }
+      );
       $errors = {};
       isValid = true;
     } catch (err) {

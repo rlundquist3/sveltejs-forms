@@ -1,3 +1,15 @@
+import isBlank from 'underscore.string';
+import {
+  cloneDeep,
+  isArray,
+  isDate,
+  isObject,
+  mapValues,
+  map,
+  omitBy,
+  reject,
+} from 'lodash-es';
+
 export function createObjectWithDefaultValue(defaultValue = '') {
   return new Proxy(
     {},
@@ -13,4 +25,21 @@ export function createObjectWithDefaultValue(defaultValue = '') {
 
 export function deepCopy(src) {
   return JSON.parse(JSON.stringify(src));
+}
+
+function recursiveClean(src) {
+  if (isArray(src)) {
+    return map(reject(src, isBlank), v => recursiveClean(v));
+  }
+  if (isDate(src)) {
+    return src.toISOString();
+  }
+  if (isObject(src)) {
+    return mapValues(omitBy(src, isBlank), v => recursiveClean(v));
+  }
+  return src;
+}
+
+export function cleanedDeepCopy(src) {
+  return recursiveClean(cloneDeep(src));
 }
